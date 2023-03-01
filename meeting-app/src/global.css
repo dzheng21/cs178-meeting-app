@@ -1,0 +1,47 @@
+#startTime {
+	margin-left: 5px;
+	font-weight: 600;
+	text-align: left;
+}
+
+#tooltip.left-tail::after {
+	content: "";
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	background: white;
+	left: -10px;
+	transform: translateY(-50%) rotate(45deg);
+	top: 50%;
+	border-radius: 3px;
+	border-bottom: 2px solid #ebedef;
+	border-left: 2px solid #ebedef;
+}
+
+#tooltip.right-tail::after {
+	content: "";
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	background: white;
+	right: -10px;
+	transform: translateY(-50%) rotate(225deg);
+	top: 50%;
+	border-radius: 3px;
+	border-bottom: 2px solid #ebedef;
+	border-left: 2px solid #ebedef;
+}
+
+#endTime {
+	right: 5px;
+	font-weight: 600;
+}
+
+body {
+	color: #333;
+	margin: 0;
+	padding: 0px;
+	box-sizing: border-box;
+	font-family: 'Lato', sans-serif;
+	background: #F9FAFB;
+}
