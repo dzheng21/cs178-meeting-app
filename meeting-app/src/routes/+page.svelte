@@ -18,9 +18,8 @@
 	let hourMargin = 10;
 
 	function resizeEvent() {
-		let windowWidth = innerWidth;
 		disableSelection();
-		responsiveText(windowWidth);
+		responsiveText(innerWidth);
 
 		if(innerWidth <= 640) {
 			hourMargin = 5;
@@ -295,9 +294,6 @@
 				}
 			}
 
-			console.log("START: " + startWeek + "_" + startTime);
-			console.log("END: " + currentWeek + "_" + currentTime);
-
 			let selection = document.getElementById("selection");
 			if(innerWidth <= 640) {
 				selection.style.left = document.getElementById("sidebar").getBoundingClientRect().width + 0 + (document.getElementById("Sunday").getBoundingClientRect().width * startWeek) + "px";
@@ -337,9 +333,11 @@
 				document.getElementById("tipText").innerHTML = daysOfTheWeek[startWeek] + " " + dateFormatter.format(timeArray[startTime]) + " &#8212; " + daysOfTheWeek[currentWeek] + " " + dateFormatter.format(newEndTime.setMinutes(timeArray[currentTime].getMinutes() + 15)) + " Selected";
 			}
 			if(selecting) {
-				document.getElementById("tipText").style.color = "#1abc9c"
+				document.getElementById("tipText").style.background = selectBorder;
+                document.getElementById("tipText").style.boxShadow = "0 0 10px 3px #32d97733";
 			} else {
-				document.getElementById("tipText").style.color = "#e74c3c"
+				document.getElementById("tipText").style.background = deleteBorder;
+                document.getElementById("tipText").style.boxShadow = "0 0 10px 3px #f2513f40";
 			}
 		}
 	}
@@ -392,7 +390,6 @@
 			let tooltip = document.getElementById("tooltip");
 
 			if (currentWeek - startWeek > 2) {
-				// tooltip.style.display = "block";
 				tooltip.style.opacity = "1";
 				tooltip.style.transformOrigin = "center center";
 				tooltip.style.transform = "scale(1)";
@@ -461,7 +458,6 @@
 			document.getElementById(hour).style.transform = "scale(1)";
 		}
 	}
-// }
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -510,7 +506,7 @@
 						</div>
 						<div class="cal-hidden-scroll" />
 					</div>
-					<div class="cal-body">
+					<div class="cal-body" id="calendarScrollWindow">
 						<div class="cal-content">
 							<div class="cal-sidebar" id="sidebar">
 								{#each timeArrayHours as hourArray, k}
@@ -535,7 +531,7 @@
 												<div class="hour">
 													{#each hourArray as time, j}
 														{@const id = i + "_" + (j + (k * 4))}
-														<div class="cal-time" {id} on:mousedown = {(event) => registerStart(event, id)} on:touchstart={(event) => registerStart(event, id)} on:mousemove = {(event) => registerMove(event, id)} on:mouseout={(event) => registerLeave(event, id)} on:touchmove={(event) => registerMove(event, id)} on:mouseover={(event) => registerMouseOver(event, id)}>
+														<div class="cal-time" {id} on:mousedown = {(event) => registerStart(event, id)} on:mousemove = {(event) => registerMove(event, id)} on:mouseout={(event) => registerLeave(event, id)} on:mouseover={(event) => registerMouseOver(event, id)}>
 															{dateFormatter.format(time)}
 														</div>
 													{/each}
@@ -620,11 +616,11 @@
 		margin: 0 auto;
 		margin-bottom: 20px;
 		padding: 20px 25px;
-		background: #34495e;
+		background: rgba(26, 188, 156,0.5);
 		display: inline-block;
 		border-radius: 20px;
-		border: 2px solid #2c3e50;
-		box-shadow: 0 0 16px #34495e80;
+		border: none;
+		box-shadow: 0 0 10px 3px #32d97733;
 		font-weight: 500;
 		color: #ecf0f1;
 		transition: all 0.15s cubic-bezier(.17,.67,.34,1.13);
@@ -732,9 +728,9 @@
 
 	/* BUTTON STYLES */
 	button {
-		border-radius: 15px;
+		border-radius: 12px;
 		background: #3498db;
-		border-color: #3498db;
+        border: none;
 		color: white;
 		padding: 10px;
 		padding-right: 16px;
@@ -808,10 +804,8 @@
 
 	@media (max-width: 1000px) {
 		#calendar {
-			/* border-radius: 0; */
 			padding: 15px;
 			padding-right: 20px;
-			/* border: none; */
 		}
 	}
 
@@ -1018,6 +1012,13 @@
 		.cal-header .cal-days .textHeading:last-child {
 			border-radius: 0 15px 15px 0;
 			border: none;
+		}
+
+        .cal-sidebar .hour .cal-time.visible, #hiddenTime {
+			font-size: 10px;
+            padding-right: 5px;
+            padding-left: 5px;
+            border-radius: 10px;
 		}
 	}
 
