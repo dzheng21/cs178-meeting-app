@@ -191,6 +191,7 @@
     if (document.getElementById("selection").offsetWidth > 0) {
       for (let i = startWeek; i <= currentWeek; i++) {
         for (let j = startTime; j <= currentTime; j++) {
+          console.log("making changes to" + i + "_" + j);
           if (selecting) {
             // Add code that captures selection data HERE
             document.getElementById(i + "_" + j).style.background = color;
@@ -534,6 +535,9 @@
       document.getElementById(hour).style.transform = "scale(1)";
     }
   }
+
+  function submitAvailability(e) {}
+
   /** @type {import('./$types').PageData} */
   export let data;
 </script>
@@ -658,6 +662,13 @@
       <span
         ><div class="virtualColor" />
         Available Only Virtually</span
+      >
+    </div>
+    <div class="legend">
+      <button
+        class="submit-availability"
+        on:click={(event) => submitAvailability(event, virtualColor)}
+        >Submit Availability</button
       >
     </div>
   </div>
