@@ -16,24 +16,30 @@
 </script>
 
 <Content>
-  <Grid>
+  <Grid style="padding-top: 7em;">
     <Row>
-      <Column>
+      <Column
+        style="text-align: center !important; content-align: center; horizontal-align: center;"
+      >
         <h1>Welcome to MeetHunter</h1>
         <h4>Please enter your name below to start.</h4>
-        <br />
+        <div style="height: 3em;" />
         <InputForm bind:username bind:submitted />
       </Column>
     </Row>
+    <Row><div style="height: 20em;" /></Row>
     <Row>
-      <Column>
-        <Button
-          kind="secondary"
-          type="submit"
-          onclick="location.href = '\output'"
-        >
-          View Results
-        </Button>
+      <Column style="text-align: center;">
+        <div>
+          <Button
+            style="background-color: green;"
+            kind="secondary"
+            type="submit"
+            onclick="location.href = '\output'"
+          >
+            View Results
+          </Button>
+        </div>
       </Column>
     </Row>
   </Grid>
