@@ -4,6 +4,25 @@
   let innerWidth = 0;
   let innerHeight = 0;
 
+  const possibleLocations = ["SEC, Science Center, River, Quad, Off Campus"];
+
+  const AvailabilityEnum = {
+    Unavailable: 0,
+    SEC: 1,
+    ScienceCenter: 2,
+    River: 3,
+    Quad: 4,
+    OffCampus: 5,
+  };
+
+  let availabilityArray = new Array(7);
+  for (let i = 0; i < availabilityArray.length; i++) {
+    availabilityArray[i] = new Array(96);
+    for (let j = 0; j < availabilityArray[i].length; j++) {
+      availabilityArray[i][j] = AvailabilityEnum.Unavailable;
+    }
+  }
+
   onMount(() => {
     window.addEventListener("resize", resizeEvent);
 
@@ -202,10 +221,13 @@
               document.getElementById(i + "_" + j).style.boxShadow =
                 "0 0 8px 2px #3796e659";
             }
+            // TODO: Reflect this in the JS array for availability.
+            availabilityArray[i][j];
           } else {
             // Add code that captures deselction data HERE
             document.getElementById(i + "_" + j).style.background = "none";
             document.getElementById(i + "_" + j).style.boxShadow = "none";
+            // TODO: Reflect this in the JS array for availability.
           }
         }
       }
@@ -536,15 +558,18 @@
     }
   }
 
-  function submitAvailability(e) {}
+  function submitAvailability(e) {
+    // Timer (end and save)
+    // update database with values for each section
+  }
 
   /** @type {import('./$types').PageData} */
   export let data;
 </script>
 
-<h2>Hey, {data.name}!</h2>
-
 <svelte:window bind:innerWidth bind:innerHeight />
+
+<h2>Hey, {data.name}!</h2>
 
 <main on:mouseup={(event) => registerEnd(event)}>
   <div id="tooltip">
