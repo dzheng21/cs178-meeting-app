@@ -6,6 +6,8 @@ import { get, writable } from 'svelte/store';
 // There are 7 days, 96 blocks, and 6 possible locations/states for each individual
 export const groupStore = writable(Array(7).fill(Array(96).fill(Array(6).fill(new Set()))));
 export let userAvailabilityDict = {};
+export let maxAvailableInPerson = 0;
+export let maxAvailableVirtual = 0;
 
 // Update method for groupStore
 export const updateStore = (name, availabilityStore) => {
@@ -26,6 +28,17 @@ export const updateStore = (name, availabilityStore) => {
             console.log('day, block, location: ', day, block, location);
             if (gs[day][block][location] !== undefined) {
                 gs[day][block][location].add(name);
+                if(gs[day][block][0].size > maxAvailableVirtual) {
+                    maxAvailableVirtual = gs[day][block][0].size
+                }
+                let availableInPerson = 0;
+                
+                for(let i = 1; i < 5; i++) {
+                    availableInPerson += gs[day][block][i].size;
+                }
+                if(availableInPerson > maxAvailableInPerson) {
+                    availableInPerson = maxAvailableInPerson;
+                }
             }
         });
         console.log("Updated groupStore: ", name, groupStore);

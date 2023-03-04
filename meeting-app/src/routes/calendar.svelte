@@ -37,13 +37,15 @@
     });
 
     function colorIn() {
-        if(input) {
+        if (input) {
             for(let id in availabilityStore) {
                 document.getElementById(id).style.background = availabilityStore[id];
             }
         } else {
           const data = get(groupStore);
-          
+          for (let day in data) {
+            console.log(day);
+          }
         } 
     }
   
