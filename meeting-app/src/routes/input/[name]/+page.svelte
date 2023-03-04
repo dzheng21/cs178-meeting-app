@@ -314,6 +314,25 @@
           document.getElementById("Sunday").getBoundingClientRect().width *
             startWeek +
           "px";
+
+        selection.style.top =
+          startTime *
+            document.getElementById(id).getBoundingClientRect().height +
+          numberOfGapsFromStart * hourMargin + 
+          "px";
+
+        selection.style.width =
+          document.getElementById("Sunday").getBoundingClientRect().width *
+            (currentWeek - startWeek + 1) -
+          0 +
+          "px";
+
+        selection.style.height =
+          document.getElementById(id).getBoundingClientRect().height *
+            (currentTime - startTime + 1) +
+          numberOfGaps * hourMargin +
+          5 +
+          "px";
       } else {
         selection.style.left =
           document.getElementById("sidebar").getBoundingClientRect().width +
@@ -321,53 +340,40 @@
           document.getElementById("Sunday").getBoundingClientRect().width *
             startWeek +
           "px";
-      }
-      if (innerWidth <= 640) {
-        selection.style.top =
-          startTime *
-            document.getElementById(id).getBoundingClientRect().height +
-          numberOfGapsFromStart * hourMargin +
-          "px";
-      } else {
+
         selection.style.top =
           startTime *
             document.getElementById(id).getBoundingClientRect().height +
           2 +
           numberOfGapsFromStart * hourMargin +
           "px";
-      }
-      if (innerWidth <= 640) {
+
         selection.style.width =
           document.getElementById("Sunday").getBoundingClientRect().width *
             (currentWeek - startWeek + 1) -
           4 +
           "px";
-      } else {
-        selection.style.width =
-          document.getElementById("Sunday").getBoundingClientRect().width *
-            (currentWeek - startWeek + 1) -
-          8 +
-          "px";
-      }
 
-      selection.style.height =
+          selection.style.height =
         document.getElementById(id).getBoundingClientRect().height *
           (currentTime - startTime + 1) +
         numberOfGaps * hourMargin +
-        2 +
+        6 +
         "px";
-      document.getElementById("selection").style.display = "block";
+      }
+
+      selection.style.display = "block";
       if (selecting) {
-        document.getElementById("selection").style.background = selectColor;
-        document.getElementById("selection").style.boxShadow =
+        selection.style.background = selectColor;
+        selection.style.boxShadow =
           "0 0 10px 3px #32d97733";
-        document.getElementById("selection").style.border =
+        selection.style.border =
           "2px solid " + selectBorder;
       } else {
-        document.getElementById("selection").style.background = deleteColor;
-        document.getElementById("selection").style.boxShadow =
+        selection.style.background = deleteColor;
+        selection.style.boxShadow =
           "0 0 10px 3px #f2513f40";
-        document.getElementById("selection").style.border =
+        selection.style.border =
           "2px solid " + deleteBorder;
       }
 
@@ -538,9 +544,9 @@
   export let data;
 </script>
 
-<h2>Hey, {data.name}!</h2>
-
 <svelte:window bind:innerWidth bind:innerHeight />
+
+<h2>Hey, {data.name}!</h2>
 
 <main on:mouseup={(event) => registerEnd(event)}>
   <div id="tooltip">
@@ -768,6 +774,9 @@
   .tooltip-header h3 {
     margin: 0;
     margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
   }
 
   .close {

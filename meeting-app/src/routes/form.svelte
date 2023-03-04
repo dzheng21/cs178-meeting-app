@@ -1,8 +1,6 @@
 <script>
   import { goto } from "$app/navigation";
 
-  import { FluidForm, TextInput, Button } from "carbon-components-svelte";
-
   export let username = "";
   export let submitted = false;
 
@@ -12,30 +10,48 @@
   };
 </script>
 
-<FluidForm
-  on:submit={(e) => {
-    e.preventDefault();
-    console.log("submit", e);
-    handleSubmit();
-    goto("/input/" + username);
-  }}
-  style="width: 45em; justify-content:center; text-align: center;"
->
-  <TextInput
-    bind:value={username}
-    labelText="User name"
-    placeholder="Enter user name..."
-    required
-  />
-  <br />
-  <div class="buttonBox">
-    <Button type="submit">Enter</Button>
-  </div>
-</FluidForm>
+<form on:submit={(e) => {
+  e.preventDefault();
+  console.log("submit", e);
+  handleSubmit();
+  goto("/input/" + username);
+}}>
+  <input bind:value={username}
+  placeholder="Enter a username..."
+  required />
+  <button type="submit">Enter</button>
+</form>
 
 <style>
-  .buttonBox {
-    display: flex;
-    justify-content: center;
+  input {
+    background: white;
+    border: 2px solid #bdc3c7;
+    padding: 14px;
+    border-radius: 16px;
+    font-size: 16px;
+    color: #2c3e50;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    transition: all 0.15s ease-out;
+    height: 50px;
+    width: 60%;
+  }
+
+  @media (max-width: 400px) {
+    input {
+      width: 75%;
+    }
+  }
+
+  input:focus, input:focus-visible {
+    border: 2px solid #1abc9c;
+    outline: none;
+    box-shadow: 0 0 10px 3px #32d97733;
+  }
+
+  button {
+    font-size: 18px;
+    margin: 0;
   }
 </style>
