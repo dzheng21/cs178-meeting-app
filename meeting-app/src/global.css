@@ -33,6 +33,15 @@ button {
     color: #ecf0f1;
 }
 
+#endTime {
+	right: 5px;
+	font-weight: 600;
+}
+
+#startTime, #endTime {
+    color: #ecf0f1;
+}
+
 #tooltip.left-tail::after {
 	content: "";
 	width: 15px;
