@@ -19,7 +19,7 @@
     handleSubmit();
     goto("/input/" + username);
   }}
-  style="width: 45em; justify-content:center; text-align: center;"
+  style="margin: auto auto; width: 75%;"
 >
   <TextInput
     bind:value={username}
