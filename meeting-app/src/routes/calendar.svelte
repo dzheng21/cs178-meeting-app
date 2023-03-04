@@ -1,6 +1,8 @@
 <script>
     import { onMount } from "svelte";
-    import Submitter from "./submitter.svelte";
+    import Submitter from "./input/[name]/submitter.svelte";
+    import { groupStore } from "./stores/groupStore.js";
+    import { get } from "svelte/store";
   
     import {
       PossibleLocations,
@@ -8,23 +10,20 @@
       LocationColorMap,
       virtualColor,
       inPersonColor,
-    } from "./constants.js";
+    } from "./input/[name]/constants.js";
   
     let innerWidth;
     let innerHeight;
     export let username;
     export let priorAvailability;
-
-    
+    export let input;
 
     let availabilityStore = {};
     if(priorAvailability != null) {
         availabilityStore = priorAvailability;
     }
 
-    console.log("PRIOR:" + availabilityStore)
-  
-    
+    console.log("PRIOR:" + availabilityStore);
   
     onMount(() => {
       window.addEventListener("resize", resizeEvent);
@@ -38,9 +37,14 @@
     });
 
     function colorIn() {
-        for(let id in availabilityStore) {
-            document.getElementById(id).style.background = availabilityStore[id];
-        }
+        if(input) {
+            for(let id in availabilityStore) {
+                document.getElementById(id).style.background = availabilityStore[id];
+            }
+        } else {
+          const data = get(groupStore);
+          
+        } 
     }
   
     let hourMargin = 10;
@@ -577,7 +581,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<main on:mouseup={(event) => registerEnd(event)}>
+<main on:mouseup={ input ? (event) => registerEnd(event) : null }>
     <div id="tooltip">
       <div class="tooltip-header">
         <h3>Confirm Selection</h3>
@@ -602,13 +606,21 @@
         </ul>
       </div>
     </div>
-    <label>TimeZone</label>
-    <select>
-      <option value="rigatoni" disabled>Rigatoni</option>
-      <option value="dave">Dave</option>
-      <option value="pumpernickel">Pumpernickel</option>
-      <option value="reeses">Reeses</option>
-    </select>
+    {#if input}
+      <label>TimeZone</label>
+      <select>
+        <option value="rigatoni" disabled>Rigatoni</option>
+        <option value="dave">Dave</option>
+        <option value="pumpernickel">Pumpernickel</option>
+        <option value="reeses">Reeses</option>
+      </select>
+    {:else}
+      <label>Meeting Type</label>
+      <select>
+        <option value="inPerson">In Person</option>
+        <option value="virtual">Virtual</option>
+      </select>
+    {/if}
     <div class="col">
       <div class="row" id="tipText">Nothing Selected</div>
       <div class="row">
@@ -664,14 +676,12 @@
                             <div
                               class="cal-time"
                               {id}
-                              on:mousedown={(event) => registerStart(event, id)}
-                              on:touchstart={(event) => registerStart(event, id)}
-                              on:mousemove={(event) => registerMove(event, id)}
+                              on:mousedown={input ? (event) => registerStart(event, id) : null}
+                              on:touchstart={input ? (event) => registerStart(event, id) : null}
+                              on:mousemove={input ? (event) => registerMove(event, id) : null}
                               on:mouseout={(event) => registerLeave(event, id)}
-                              on:touchmove={(event) => registerMove(event, id)}
-                              on:mouseover={(event) =>
-                                registerMouseOver(event, id)}
-                            >
+                              on:touchmove={input ? (event) => registerMove(event, id) : null}
+                              on:mouseover={(event) => registerMouseOver(event, id)}>
                               {dateFormatter.format(time)}
                             </div>
                           {/each}
@@ -698,9 +708,11 @@
             </span>
           </div>
         </span>
+        {#if input}
         <span>
           <Submitter availability={availabilityStore} username={username} />
         </span>
+        {/if}
       </div>
     </div>
   </main>
