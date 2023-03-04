@@ -13,14 +13,6 @@
   let innerWidth = 0;
   let innerHeight = 0;
 
-  // let availabilityArray = new Array(7);
-  // for (let i = 0; i < availabilityArray.length; i++) {
-  //   availabilityArray[i] = new Array(96);
-  //   for (let j = 0; j < availabilityArray[i].length; j++) {
-  //     availabilityArray[i][j] = AvailabilityEnum.Unavailable;
-  //   }
-  // }
-
   let availabilityStore = {};
 
   onMount(() => {
@@ -676,17 +668,23 @@
         </div>
       </div>
     </div>
-    <div class="legend">
+    <div class="footer">
       <span>
-        <div class="inPersonColor" />
-        Available
+        <div class="legend">
+          <span>
+            <div class="inPersonColor" />
+            Available
+          </span>
+          <span>
+            <div class="virtualColor" />
+            Available Only Virtually
+          </span>
+        </div>
       </span>
       <span>
-        <div class="virtualColor" />
-        Available Only Virtually
+        <Submitter availability={availabilityStore} username={data.name} />
       </span>
     </div>
-    <div><Submitter availability={availabilityStore} /></div>
   </div>
 </main>
 
@@ -703,6 +701,20 @@
 
   .row {
     display: flex;
+  }
+
+  /* FOOTER STYLES */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  .footer span {
+    display: inline-block;
   }
 
   /* LEGEND STYLES */

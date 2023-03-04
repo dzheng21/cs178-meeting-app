@@ -1,25 +1,27 @@
 <script>
+  import { goto } from "$app/navigation";
   import { updateStore } from "../../stores/groupStore.js";
+  import { Button } from "carbon-components-svelte";
 
   function submitAvailability(username, availability) {
     // Timer (end and save)
 
-    // update store with values for each section
+    // Update store with values for each section
     updateStore(username, availability);
-    console.log("Update submitted");
+    console.log("Submit completed", username, availability);
+
+    // Redirect to main page
+    goto("/");
   }
 
-  export let availability = [];
+  export let availability = {};
   export let username = "";
 </script>
 
-<div class="legend">
-  <button
-    class="submit-availability"
-    on:click={() => submitAvailability(username, availability)}
-  >
+<div>
+  <Button on:click={submitAvailability(username, availability)}>
     Submit Availability
-  </button>
+  </Button>
 </div>
 
 <style>

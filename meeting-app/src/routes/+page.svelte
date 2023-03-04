@@ -18,9 +18,7 @@
 <Content>
   <Grid style="padding-top: 7em;">
     <Row>
-      <Column
-        style="text-align: center !important; content-align: center; horizontal-align: center;"
-      >
+      <Column style="text-align: center;">
         <h1>Welcome to MeetHunter</h1>
         <h4>Please enter your name below to start.</h4>
         <div style="height: 3em;" />
