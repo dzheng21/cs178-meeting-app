@@ -1,27 +1,27 @@
 <script>
   import { onMount } from "svelte";
+  import Submitter from "./submitter.svelte";
+
+  import {
+    PossibleLocations,
+    AvailabilityEnum,
+    LocationColorMap,
+    virtualColor,
+    inPersonColor,
+  } from "./constants.js";
 
   let innerWidth = 0;
   let innerHeight = 0;
 
-  const possibleLocations = ["SEC, Science Center, River, Quad, Off Campus"];
+  // let availabilityArray = new Array(7);
+  // for (let i = 0; i < availabilityArray.length; i++) {
+  //   availabilityArray[i] = new Array(96);
+  //   for (let j = 0; j < availabilityArray[i].length; j++) {
+  //     availabilityArray[i][j] = AvailabilityEnum.Unavailable;
+  //   }
+  // }
 
-  const AvailabilityEnum = {
-    Unavailable: 0,
-    SEC: 1,
-    ScienceCenter: 2,
-    River: 3,
-    Quad: 4,
-    OffCampus: 5,
-  };
-
-  let availabilityArray = new Array(7);
-  for (let i = 0; i < availabilityArray.length; i++) {
-    availabilityArray[i] = new Array(96);
-    for (let j = 0; j < availabilityArray[i].length; j++) {
-      availabilityArray[i][j] = AvailabilityEnum.Unavailable;
-    }
-  }
+  let availabilityStore = {};
 
   onMount(() => {
     window.addEventListener("resize", resizeEvent);
@@ -71,8 +71,8 @@
   let selectBorder = "#1abc9c";
   let deleteColor = "rgba(231, 76, 60,0.5)";
   let deleteBorder = "#e74c3c";
-  let virtualColor = "rgb(52, 152, 219)";
-  let inPersonColor = "rgb(46, 204, 113)";
+  // const virtualColor = "rgb(52, 152, 219)";
+  // const inPersonColor = "rgb(46, 204, 113)";
 
   // Create an array Dates filled with 15 minute time increments
   let timeArray = new Array();
@@ -222,12 +222,14 @@
                 "0 0 8px 2px #3796e659";
             }
             // TODO: Reflect this in the JS array for availability.
-            availabilityArray[i][j];
+            availabilityStore[i + "_" + j] = color;
           } else {
             // Add code that captures deselction data HERE
             document.getElementById(i + "_" + j).style.background = "none";
             document.getElementById(i + "_" + j).style.boxShadow = "none";
+
             // TODO: Reflect this in the JS array for availability.
+            delete availabilityStore[i + "_" + j];
           }
         }
       }
@@ -558,11 +560,6 @@
     }
   }
 
-  function submitAvailability(e) {
-    // Timer (end and save)
-    // update database with values for each section
-  }
-
   /** @type {import('./$types').PageData} */
   export let data;
 </script>
@@ -680,22 +677,16 @@
       </div>
     </div>
     <div class="legend">
-      <span
-        ><div class="inPersonColor" />
-        Available</span
-      >
-      <span
-        ><div class="virtualColor" />
-        Available Only Virtually</span
-      >
+      <span>
+        <div class="inPersonColor" />
+        Available
+      </span>
+      <span>
+        <div class="virtualColor" />
+        Available Only Virtually
+      </span>
     </div>
-    <div class="legend">
-      <button
-        class="submit-availability"
-        on:click={(event) => submitAvailability(event, virtualColor)}
-        >Submit Availability</button
-      >
-    </div>
+    <div><Submitter availability={availabilityStore} /></div>
   </div>
 </main>
 
