@@ -5,6 +5,7 @@ import { get, writable } from 'svelte/store';
 // Example: groupStore[0][0][0] = Set of names of people who are available on Monday, 8:00-8:15, and in location 0
 // There are 7 days, 96 blocks, and 6 possible locations/states for each individual
 export const groupStore = writable(Array(7).fill(Array(96).fill(Array(6).fill(new Set()))));
+export let userAvailabilityDict = {};
 
 // Update method for groupStore
 export const updateStore = (name, availabilityStore) => {
@@ -12,7 +13,7 @@ export const updateStore = (name, availabilityStore) => {
     // console.log("asdasdf", Object.keys(availabilityStore))
     // console.log(availabilityStore)
     console.log("what", get(groupStore), " asdf ");
-
+    userAvailabilityDict[name] = availabilityStore;
     groupStore.update((gs) => {
         console.log(gs);
         const blocksFilled = Object.keys(availabilityStore);
@@ -30,4 +31,8 @@ export const updateStore = (name, availabilityStore) => {
         console.log("Updated groupStore: ", name, groupStore);
         return gs;
     });  
+}
+
+export const getAvailability = (name) => {
+    return userAvailabilityDict[name];
 }
