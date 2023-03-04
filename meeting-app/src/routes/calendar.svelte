@@ -43,10 +43,21 @@
             }
         } else {
           const data = get(groupStore);
-          for (let day in data) {
-            console.log(day);
-          }
-        } 
+
+          console.log ("Should be 7: ", data. length);
+          data.forEach((day) => {
+            console.log("Should be 96: ", day. length);
+            day.forEach( (block) => {
+              console.log("Should be 6: ", block. length);
+              block.forEach((set) => {
+                if (set.size != 0) {
+                  console.log("Should be people: ", set);
+                      
+                }
+              });
+            });
+          });
+        }
     }
   
     let hourMargin = 10;
