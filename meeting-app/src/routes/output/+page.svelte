@@ -13,6 +13,6 @@
   };
 </script>
 
-<Calendar input={false} username={null} priorAvailability={data} />
+<Calendar input={false} username={null} priorAvailability={null} />
 
 <Button on:click={backToHome}>Back to home</Button>

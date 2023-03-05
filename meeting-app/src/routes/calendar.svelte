@@ -8,6 +8,7 @@
     PossibleLocations,
     AvailabilityEnum,
     LocationColorMap,
+    StringToLocationInteger,
     virtualColor,
     inPersonColor,
   } from "./input/[name]/constants.js";
@@ -45,21 +46,22 @@
       const data = get(groupStore);
       const maxAvailableInPerson = get(groupStore);
 
-      let opacityIncrement = 1/maxAvailableInPerson;
+      let opacityIncrement = 1 / maxAvailableInPerson;
 
-      console.log("Should be 7: ", data.length);
-      data.forEach((day) => {
-        console.log("Should be 96: ", day.length);
-        day.forEach((block) => {
-          console.log("Should be 6: ", block.length);
-          block.forEach((set) => {
+      // iterate through data with indices
+      for (let day = 0; day < data.length; day++) {
+        for (let block = 0; block < data[day].length; block++) {
+          for (let state = 0; state < data[day][block].length; state++) {
+            const set = data[day][block][state];
             if (set.size != 0) {
-              console.log("Should be people: ", set);
-
+              // console.log("Set at ", day + "_" + block, "is ", set);
+              let id = day + "_" + block;
+              document.getElementById(id).style.background =
+                LocationColorMap[state];
             }
-          });
-        });
-      });
+          }
+        }
+      }
     }
   }
 
@@ -429,7 +431,6 @@
     if (document.getElementById("selection").offsetWidth > 0) {
       for (let i = startWeek; i <= currentWeek; i++) {
         for (let j = startTime; j <= currentTime; j++) {
-          console.log("making changes to" + i + "_" + j);
           if (selecting) {
             // Add code that captures selection data HERE
             document.getElementById(i + "_" + j).style.background = color;
@@ -441,7 +442,7 @@
                 "0 0 8px 2px #3796e659";
             }
             // TODO: Reflect this in the JS array for availability.
-            availabilityStore[i + "_" + j] = color;
+            availabilityStore[i + "_" + j] = StringToLocationInteger(color);
           } else {
             // Add code that captures deselction data HERE
             document.getElementById(i + "_" + j).style.background = "none";
