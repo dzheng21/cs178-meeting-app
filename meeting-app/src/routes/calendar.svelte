@@ -43,6 +43,9 @@
       }
     } else {
       const data = get(groupStore);
+      const maxAvailableInPerson = get(groupStore);
+
+      let opacityIncrement = 1/maxAvailableInPerson;
 
       console.log("Should be 7: ", data.length);
       data.forEach((day) => {
@@ -52,6 +55,7 @@
           block.forEach((set) => {
             if (set.size != 0) {
               console.log("Should be people: ", set);
+
             }
           });
         });
