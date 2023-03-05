@@ -4,7 +4,7 @@ import { get, writable } from 'svelte/store';
 // Format: groupStore[day][block][location] = Set of names
 // Example: groupStore[0][0][0] = Set of names of people who are available on Monday, 8:00-8:15, and in location 0
 // There are 7 days, 96 blocks, and 6 possible locations/states for each individual
-export const groupStore = writable(Array(7).fill(Array(96).fill(Array(6).fill(new Set()))));
+export let groupStore = writable(Array(7).fill(Array(96).fill(Array(6).fill(new Set()))));
 export let userAvailabilityDict = {};
 export let maxAvailableInPerson = 0;
 export let maxAvailableVirtual = 0;
@@ -17,7 +17,7 @@ export const updateStore = (name, availabilityStore) => {
     console.log("what", get(groupStore), " asdf ");
     userAvailabilityDict[name] = availabilityStore;
     groupStore.update((gs) => {
-        console.log(gs);
+        console.log('old gs', gs);
         const blocksFilled = Object.keys(availabilityStore);
         blocksFilled.forEach((k) => {
             console.log("k: ", k)
@@ -41,9 +41,10 @@ export const updateStore = (name, availabilityStore) => {
                 }
             }
         });
-        console.log("Updated groupStore: ", name, groupStore);
+        console.log('new gs', gs);
         return gs;
-    });  
+    });
+    console.log("Updated groupStore: ", name, get(groupStore));
 }
 
 export const getAvailability = (name) => {
