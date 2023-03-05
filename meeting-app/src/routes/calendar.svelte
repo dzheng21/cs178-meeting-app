@@ -40,7 +40,8 @@
   function colorIn() {
     if (input) {
       for (let id in availabilityStore) {
-        document.getElementById(id).style.background = availabilityStore[id];
+        document.getElementById(id).style.background =
+          LocationColorMap[availabilityStore[id]];
       }
     } else {
       const data = get(groupStore);
