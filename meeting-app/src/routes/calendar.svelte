@@ -72,13 +72,21 @@
               // console.log("Set at ", day + "_" + block, "is ", set);
               let id = day + "_" + block;
               if(mode == "inPerson") {
-                let opacityIncrement = 1 / maxAvailableInPerson;
+                let opacityIncrement = 0.5;
+                if(maxAvailableInPerson > 1) {
+                  opacityIncrement = 1 / maxAvailableInPerson;
+                }
+                
                 if(state > 0) {
                   document.getElementById(id).style.background = LocationColorMap[state];
                   document.getElementById(id).style.opacity = opacityIncrement * set.size;
                 }
               } else {
-                let opacityIncrement = 1 / maxAvailableVirtual;
+                let opacityIncrement = 0.5;
+                if(maxAvailableVirtual > 1) {
+                  opacityIncrement = 1 / maxAvailableVirtual;
+                }
+                
                 if(state == 0) {
                   document.getElementById(id).style.background = LocationColorMap[state];
                   document.getElementById(id).style.opacity = opacityIncrement * set.size;
