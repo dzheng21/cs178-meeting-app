@@ -11,8 +11,21 @@
 </script>
 
 
-<h2>Hey, {data.name}!</h2>
+<h2>Hey, <span class="name">{data.name}!</span></h2>
 
 <Calendar username={data.name} priorAvailability={getAvailability(data.name)} input={true}/>
 
+<style>
+  h2 {
+    font-size: 40px;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-top: 5vh;
+  }
 
+  .name {
+    color: #1abc9c;
+    font-weight: 900;
+  }
+</style>

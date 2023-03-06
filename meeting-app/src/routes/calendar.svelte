@@ -40,6 +40,12 @@
 
   function changeViewMode() {
     mode = document.getElementById("viewMode").options[document.getElementById("viewMode").selectedIndex].value;
+    if(mode != "inPerson") {
+      document.getElementById("viewMode").classList.remove("inPerson");
+    } else {
+      document.getElementById("viewMode").classList.add("inPerson");
+    }
+
     clearColors();
     colorIn();
   }
@@ -62,7 +68,6 @@
           LocationColorMap[availabilityStore[id]];
       }
     } else {
-
       // iterate through data with indices
       for (let day = 0; day < data.length; day++) {
         for (let block = 0; block < data[day].length; block++) {
@@ -690,26 +695,28 @@
       </ul>
     </div>
   </div>
-  {#if input}
-    <label>TimeZone</label>
-    <select>
-      <option value="rigatoni" disabled>Rigatoni</option>
-      <option value="dave">Dave</option>
-      <option value="pumpernickel">Pumpernickel</option>
-      <option value="reeses">Reeses</option>
-    </select>
-  {:else}
-    <label>Meeting Type</label>
-    <select on:change={changeViewMode} id="viewMode">
-      <option value="inPerson">In Person</option>
-      <option value="virtual">Virtual</option>
-    </select>
-  {/if}
+  <div class="dropdown">
+    {#if input}
+      <label for="timezone">TimeZone</label>
+      <select id="timezone">
+        <option value="rigatoni" disabled>Rigatoni</option>
+        <option value="dave">Dave</option>
+        <option value="pumpernickel">Pumpernickel</option>
+        <option value="reeses">Reeses</option>
+      </select>
+    {:else}
+      <label for="viewMode">Meeting Type</label>
+      <select on:change={changeViewMode} id="viewMode" class="inPerson">
+        <option value="inPerson">In Person</option>
+        <option value="virtual">Virtual</option>
+      </select>
+    {/if}
+  </div>
   <div class="col">
     <div class="row" id="tipText">Nothing Selected</div>
     <div class="row">
       <div id="calendar" class="col">
-        <div class="cal week" style="height: 65vh;">
+        <div class="cal week" style="height: 55vh;">
           <div class="cal-header cal-with-scroll">
             <div class="cal-sidebar">
               <div class="cal-hidden-times">
@@ -789,27 +796,25 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+    <div class="legend">
       <span>
-        <div class="legend">
-          <span>
-            <div class="inPersonColor" />
-            Available
-          </span>
-          <span>
-            <div class="virtualColor" />
-            Available Only Virtually
-          </span>
-        </div>
+        <div class="inPersonColor" />
+        Available
       </span>
-      {#if input}
-        <span>
-          <Submitter availability={availabilityStore} {username} />
-        </span>
-      {/if}
+      <span>
+        <div class="virtualColor" />
+        Available Only Virtually
+      </span>
     </div>
   </div>
 </main>
+
+{#if input && Object.keys(availabilityStore).length != 0}
+  <div class="footer-spacer"></div>
+  <div class="footer">
+    <Submitter availability={availabilityStore} {username} />
+  </div>
+{/if}
 
 <style>
   /* GENERAL STYLES */
@@ -824,6 +829,66 @@
 
   .row {
     display: flex;
+  }
+
+  .dropdown {
+    width: 100%;
+    text-align: center;
+    margin: 15px 0;
+  }
+
+  select {
+    background: #3498db;
+    box-shadow: #3a9ff2bf 0 12px 15px -12px;
+    padding: 6px;
+    font-size: 16px;
+    border: 5px solid #3498db;
+    border-radius: 16px;
+    color: white;
+    font-weight: 600;
+    transition: 0.15s all ease-out;
+  }
+
+  select.inPerson {
+    background: #2ecc71;
+    border-color: #2ecc71;
+    box-shadow: #32d977bf 0 12px 15px -12px;
+  }
+
+  select.inPerson:hover {
+    background: #58d68d;
+    border-color: #58d68d;
+  }
+
+  select:hover {
+    background: #5dade2;
+    border-color: #5dade2;
+  }
+
+  select:focus {
+    outline: none;
+  }
+
+  select:hover {
+    cursor: pointer;
+  }
+
+  /* FOOTER STYLES */
+  .footer {
+    width: 100%;
+    text-align: center;
+    background: #ecf0f1D9;
+    position: fixed;
+    bottom: 0;
+    padding: 25px;
+    border-top: 2px solid #bdc3c7;
+    backdrop-filter: blur(15px) brightness(200%);
+    z-index: 100;
+  }
+
+  .footer-spacer {
+    width: 100%;
+    height: 180px;
   }
 
   /* LEGEND STYLES */

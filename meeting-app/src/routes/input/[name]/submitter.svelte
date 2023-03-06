@@ -19,12 +19,20 @@
 </script>
 
 <div>
-  <Button on:click={submitAvailability(username, availability)}>
+  <button on:click={submitAvailability(username, availability)}>
     Submit Availability
-  </Button>
+  </button>
 </div>
 
 <style>
+  button {
+    font-size: 18px;
+    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+  }
+
   .legend {
     text-align: center;
     margin: 0 auto;
