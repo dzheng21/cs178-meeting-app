@@ -8,7 +8,7 @@
     // Timer (end and save)
     let timeDiff = timeFinish - timeStart;
     console.log("Took the user: ", timeDiff / 1000, " seconds");
-    saveToTimeStore(username, timeDiff);
+    saveToTimeStore(username, timeStart, timeFinish, timeDiff);
 
     // Update store with values for each section
     updateStore(username, availability);

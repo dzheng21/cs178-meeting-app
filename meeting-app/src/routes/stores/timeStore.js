@@ -5,21 +5,20 @@ import { get, writable } from 'svelte/store';
 export const timeStore = writable({});
 
 // Update method for groupStore
-export const saveToTimeStore = (name, time) => {
+export const saveToTimeStore = (name, start, finish, time) => {
     timeStore.update((ts) => {
-        ts[name] = time;
+        ts[name] = start+","+finish+","+time;
         return ts;
     });
     console.log("Updated groupStore: ", name, time, get(timeStore));
 }
 
 export const downloadTimeCSV = () => {
-    // const csvContent = "data:text/csv;charset=utf-8,";
     const data = get(timeStore);
     const keys = Object.keys(data);
     const values = Object.values(data);
     let csv = '';
-    csv += "username,time(ms)\n";
+    csv += "username,start,finish,time(ms)\n";
     for(let i = 0; i < keys.length; i++) {
         csv += keys[i] + "," + values[i] + "\n";
     }
