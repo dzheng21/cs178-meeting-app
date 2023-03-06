@@ -18,7 +18,7 @@
   export let username = "";
 </script>
 
-<div>
+<div style="margin-top: 15px; margin-right: auto; margin-left: auto;">
   <button on:click={submitAvailability(username, availability)}>
     Submit Availability
   </button>

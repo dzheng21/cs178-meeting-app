@@ -1,7 +1,13 @@
 <script>
   import { onMount } from "svelte";
   import Submitter from "./input/[name]/submitter.svelte";
-  import { groupStore, maxAvailableInPerson, maxAvailableVirtual } from "./stores/groupStore.js";
+  import { goto } from "$app/navigation";
+  import TimezonePicker from "svelte-timezone-picker";
+  import {
+    groupStore,
+    maxAvailableInPerson,
+    maxAvailableVirtual,
+  } from "./stores/groupStore.js";
   import { get } from "svelte/store";
 
   import {
@@ -15,7 +21,7 @@
 
   let innerWidth;
   let innerHeight;
-  let mode = "inPerson"
+  let mode = "inPerson";
   export let username;
   export let priorAvailability;
   export let input;
@@ -24,8 +30,6 @@
   if (priorAvailability != null) {
     availabilityStore = priorAvailability;
   }
-
-  console.log("PRIOR:" + Object.keys(availabilityStore));
 
   onMount(() => {
     window.addEventListener("resize", resizeEvent);
@@ -39,8 +43,11 @@
   });
 
   function changeViewMode() {
-    mode = document.getElementById("viewMode").options[document.getElementById("viewMode").selectedIndex].value;
-    if(mode != "inPerson") {
+    mode =
+      document.getElementById("viewMode").options[
+        document.getElementById("viewMode").selectedIndex
+      ].value;
+    if (mode != "inPerson") {
       document.getElementById("viewMode").classList.remove("inPerson");
     } else {
       document.getElementById("viewMode").classList.add("inPerson");
@@ -51,10 +58,10 @@
   }
 
   function clearColors() {
-    for(let i = 0; i < daysOfTheWeek.length; i++) {
-      console.log("DAY: " + i)
-      for(let j = 0; j < timeArray.length; j++) {
-        console.log("TIME: " + j)
+    for (let i = 0; i < daysOfTheWeek.length; i++) {
+      // console.log("DAY: " + i);
+      for (let j = 0; j < timeArray.length; j++) {
+        // console.log("TIME: " + j);
         document.getElementById(i + "_" + j).style.background = "none";
       }
     }
@@ -76,26 +83,30 @@
             if (set.size != 0) {
               // console.log("Set at ", day + "_" + block, "is ", set);
               let id = day + "_" + block;
-              if(mode == "inPerson") {
+              if (mode == "inPerson") {
                 let opacityIncrement = 0.5;
-                if(maxAvailableInPerson > 1) {
+                if (maxAvailableInPerson > 1) {
                   opacityIncrement = 1 / maxAvailableInPerson;
                 }
-                
-                if(state > 0) {
-                  document.getElementById(id).style.background = LocationColorMap[state];
-                  document.getElementById(id).style.opacity = opacityIncrement * set.size;
+
+                if (state > 0) {
+                  document.getElementById(id).style.background =
+                    LocationColorMap[state];
+                  document.getElementById(id).style.opacity =
+                    opacityIncrement * set.size;
                 }
               } else {
                 let opacityIncrement = 0.5;
-                if(maxAvailableVirtual > 1) {
+                if (maxAvailableVirtual > 1) {
                   opacityIncrement = 1 / maxAvailableVirtual;
                 }
-                
-                if(state == 0) {
-                  document.getElementById(id).style.background = LocationColorMap[state];
-                  document.getElementById(id).style.opacity = opacityIncrement * set.size;
-                }
+
+                // if (state == 0) {
+                document.getElementById(id).style.background =
+                  LocationColorMap[0];
+                document.getElementById(id).style.opacity =
+                  opacityIncrement * set.size;
+                // }
               }
             }
           }
@@ -550,33 +561,43 @@
       document.getElementById(hour).style.transform = "scale(1.05)";
     }
 
-    if(!input) {
+    if (!input) {
       let tipText = document.getElementById("tipText");
       tipText.style.opacity = "1";
       tipText.style.transform = "scale(1)";
 
-      let text = ""
+      let text = "";
       let state = 0;
       if (mode == "inPerson") {
         state = 1;
       }
 
-      const arr = Array.from(data[getWeekNumberFromID(id)][getTimeCodeFromID(id)][state]);
+      let arr = Array.from(
+        data[getWeekNumberFromID(id)][getTimeCodeFromID(id)][state]
+      );
+      if (state == 0) {
+        let arr1 = Array.from(
+          data[getWeekNumberFromID(id)][getTimeCodeFromID(id)][1]
+        );
+        if (arr1.length != 0) {
+          arr = [...arr, ...arr1];
+        }
+      }
       for (let i = 0; i < arr.length; i++) {
-        if(i == 0) {
+        if (i == 0) {
           text += arr[i];
         } else {
           text += ", " + arr[i];
         }
       }
 
-      if(arr.length == 1) {
-        text += " is available at this time"
-      } else if(arr.length != 0) {
-        text += " are available at this time"
-      }    
+      if (arr.length == 1) {
+        text += " is available at this time";
+      } else if (arr.length != 0) {
+        text += " are available at this time";
+      }
 
-      if(text == "") {
+      if (text == "") {
         tipText.innerText = "No one is available at this time";
       } else {
         tipText.innerText = text;
@@ -585,9 +606,9 @@
   }
 
   function registerLeave(e, id) {
-    if(!input) {
+    if (!input) {
       document.getElementById("tipText").style.opacity = "0";
-    document.getElementById("tipText").style.transform = "scale(0)";
+      document.getElementById("tipText").style.transform = "scale(0)";
     }
     document.getElementById(id).style.fontSize = "0px";
 
@@ -666,6 +687,10 @@
       }
     }
   }
+
+  const backToHome = () => {
+    goto("/");
+  };
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -695,28 +720,32 @@
       </ul>
     </div>
   </div>
-  <div class="dropdown">
+  <div
+    style="display: inline-flex; width: 80%; align-items: center; justify-content: space-between; margin-left: 10%; margin-right: 10%; margin-top: 1em;"
+  >
     {#if input}
-      <label for="timezone">TimeZone</label>
-      <select id="timezone">
-        <option value="rigatoni" disabled>Rigatoni</option>
-        <option value="dave">Dave</option>
-        <option value="pumpernickel">Pumpernickel</option>
-        <option value="reeses">Reeses</option>
-      </select>
+      <h3 class="header">Hey, <span class="name">{username}!</span></h3>
+      <div style="margin-left:auto; margin-right: auto;">
+        <TimezonePicker timezone="America/New_York" />
+      </div>
+      <button on:click={backToHome}>Back to home</button>
     {:else}
-      <label for="viewMode">Meeting Type</label>
-      <select on:change={changeViewMode} id="viewMode" class="inPerson">
-        <option value="inPerson">In Person</option>
-        <option value="virtual">Virtual</option>
-      </select>
+      <div>
+        <label>Meeting Type</label>
+        <select on:change={changeViewMode} id="viewMode">
+          <option value="inPerson">In Person</option>
+          <option value="virtual">Virtual</option>
+        </select>
+      </div>
+      <h3 class="header">Results</h3>
+      <button on:click={backToHome}>Back to home</button>
     {/if}
   </div>
   <div class="col">
     <div class="row" id="tipText">Nothing Selected</div>
     <div class="row">
       <div id="calendar" class="col">
-        <div class="cal week" style="height: 55vh;">
+        <div class="cal week" style="height: 65vh;">
           <div class="cal-header cal-with-scroll">
             <div class="cal-sidebar">
               <div class="cal-hidden-times">
@@ -796,25 +825,27 @@
         </div>
       </div>
     </div>
-    <div class="legend">
-      <span>
-        <div class="inPersonColor" />
-        Available
-      </span>
-      <span>
-        <div class="virtualColor" />
-        Available Only Virtually
-      </span>
+    <div
+      style="display: inline-flex; width: 80%; align-items: center; justify-content: space-between; margin-left: 10%; margin-right: 10%;"
+    >
+      <div class="legend">
+        <span>
+          <div class="inPersonColor" />
+          Available
+        </span>
+        <span>
+          <div class="virtualColor" />
+          Available Only Virtually
+        </span>
+      </div>
+      {#if input}
+        <Submitter availability={availabilityStore} {username} />
+      {:else}
+        <p><em> All times in EST </em></p>
+      {/if}
     </div>
   </div>
 </main>
-
-{#if input && Object.keys(availabilityStore).length != 0}
-  <div class="footer-spacer"></div>
-  <div class="footer">
-    <Submitter availability={availabilityStore} {username} />
-  </div>
-{/if}
 
 <style>
   /* GENERAL STYLES */
@@ -877,7 +908,7 @@
   .footer {
     width: 100%;
     text-align: center;
-    background: #ecf0f1D9;
+    background: #ecf0f1d9;
     position: fixed;
     bottom: 0;
     padding: 25px;
@@ -895,7 +926,7 @@
   .legend {
     text-align: center;
     margin: 0 auto;
-    margin-top: 25px;
+    margin-top: 15px;
     padding: 20px 25px;
     background: white;
     display: inline-block;
@@ -951,6 +982,19 @@
     font-size: 16px;
     transform: scale(0);
     font-weight: 600;
+  }
+
+  .header h3 {
+    font-size: 35px;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-top: 2vh;
+  }
+
+  .name {
+    color: #1abc9c;
+    font-weight: 900;
   }
 
   /* TOOLTIP STYLES */

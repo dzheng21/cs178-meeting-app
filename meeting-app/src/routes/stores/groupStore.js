@@ -46,18 +46,18 @@ export const updateStore = (name, availabilityStore) => {
             // TODO: Change const location = 0 hardcoding to true location/state value [integer]
             const location = availabilityStore[key];
             
-                gs[day][block][location].add(name);
-
-            if(gs[day][block][0].size > maxAvailableVirtual) {
-                    maxAvailableVirtual = gs[day][block][0].size
-                }
-                let availableInPerson = 0;
+            gs[day][block][location].add(name);
+            
+            let availableInPerson = 0;
                 
             for(let i = 1; i < 5; i++) {
                     availableInPerson += gs[day][block][i].size;
                 }
             if(availableInPerson > maxAvailableInPerson) {
                 maxAvailableInPerson = availableInPerson;
+            }
+            if(gs[day][block][0].size + availableInPerson > maxAvailableVirtual) {
+                maxAvailableVirtual = gs[day][block][0].size + availableInPerson;
             }
         });
         return gs;
