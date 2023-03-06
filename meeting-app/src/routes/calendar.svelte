@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Submitter from "./input/[name]/submitter.svelte";
-  import { groupStore } from "./stores/groupStore.js";
+  import { groupStore, maxAvailableInPerson, maxAvailableVirtual } from "./stores/groupStore.js";
   import { get } from "svelte/store";
 
   import {
@@ -15,6 +15,7 @@
 
   let innerWidth;
   let innerHeight;
+  let mode = "inPerson"
   export let username;
   export let priorAvailability;
   export let input;
@@ -37,6 +38,22 @@
     }
   });
 
+  function changeViewMode() {
+    mode = document.getElementById("viewMode").options[document.getElementById("viewMode").selectedIndex].value;
+    clearColors();
+    colorIn();
+  }
+
+  function clearColors() {
+    for(let i = 0; i < daysOfTheWeek.length; i++) {
+      console.log("DAY: " + i)
+      for(let j = 0; j < timeArray.length; j++) {
+        console.log("TIME: " + j)
+        document.getElementById(i + "_" + j).style.background = "none";
+      }
+    }
+  }
+
   function colorIn() {
     if (input) {
       for (let id in availabilityStore) {
@@ -45,9 +62,6 @@
       }
     } else {
       const data = get(groupStore);
-      const maxAvailableInPerson = get(groupStore);
-
-      let opacityIncrement = 1 / maxAvailableInPerson;
 
       // iterate through data with indices
       for (let day = 0; day < data.length; day++) {
@@ -57,8 +71,19 @@
             if (set.size != 0) {
               // console.log("Set at ", day + "_" + block, "is ", set);
               let id = day + "_" + block;
-              document.getElementById(id).style.background =
-                LocationColorMap[state];
+              if(mode == "inPerson") {
+                let opacityIncrement = 1 / maxAvailableInPerson;
+                if(state > 0) {
+                  document.getElementById(id).style.background = LocationColorMap[state];
+                  document.getElementById(id).style.opacity = opacityIncrement * set.size;
+                }
+              } else {
+                let opacityIncrement = 1 / maxAvailableVirtual;
+                if(state == 0) {
+                  document.getElementById(id).style.background = LocationColorMap[state];
+                  document.getElementById(id).style.opacity = opacityIncrement * set.size;
+                }
+              }
             }
           }
         }
@@ -630,7 +655,7 @@
     </select>
   {:else}
     <label>Meeting Type</label>
-    <select>
+    <select on:change={changeViewMode} id="viewMode">
       <option value="inPerson">In Person</option>
       <option value="virtual">Virtual</option>
     </select>
