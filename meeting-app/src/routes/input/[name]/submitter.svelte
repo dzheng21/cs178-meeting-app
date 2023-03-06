@@ -1,10 +1,14 @@
 <script>
   import { goto } from "$app/navigation";
   import { updateStore } from "../../stores/groupStore.js";
-  import { Button } from "carbon-components-svelte";
+  import { saveToTimeStore } from "../../stores/timeStore.js";
+  import { Button, SideNavMenuItem } from "carbon-components-svelte";
 
-  function submitAvailability(username, availability) {
+  function submitAvailability(username, availability, timeStart, timeFinish) {
     // Timer (end and save)
+    let timeDiff = timeFinish - timeStart;
+    console.log("Took the user: ", timeDiff / 1000, " seconds");
+    saveToTimeStore(username, timeDiff);
 
     // Update store with values for each section
     updateStore(username, availability);
@@ -16,10 +20,13 @@
 
   export let availability = {};
   export let username = "";
+  export let timeStart = 0;
 </script>
 
 <div style="margin-top: 15px; margin-right: auto; margin-left: auto;">
-  <button on:click={submitAvailability(username, availability)}>
+  <button
+    on:click={submitAvailability(username, availability, timeStart, Date.now())}
+  >
     Submit Availability
   </button>
 </div>

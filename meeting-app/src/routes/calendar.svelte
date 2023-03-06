@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { downloadTimeCSV } from "./stores/timeStore.js";
   import Submitter from "./input/[name]/submitter.svelte";
   import { goto } from "$app/navigation";
   import TimezonePicker from "svelte-timezone-picker";
@@ -31,6 +32,7 @@
     availabilityStore = priorAvailability;
   }
 
+  let startTimer = 0;
   onMount(() => {
     window.addEventListener("resize", resizeEvent);
     colorIn();
@@ -40,6 +42,7 @@
     if (innerWidth <= 640) {
       hourMargin = 5;
     }
+    startTimer = Date.now();
   });
 
   function changeViewMode() {
@@ -828,6 +831,9 @@
     <div
       style="display: inline-flex; width: 80%; align-items: center; justify-content: space-between; margin-left: 10%; margin-right: 10%;"
     >
+      {#if !input}
+        <button on:click={downloadTimeCSV}> Download Times </button>
+      {/if}
       <div class="legend">
         <span>
           <div class="inPersonColor" />
@@ -839,7 +845,11 @@
         </span>
       </div>
       {#if input}
-        <Submitter availability={availabilityStore} {username} />
+        <Submitter
+          availability={availabilityStore}
+          {username}
+          timeStart={startTimer}
+        />
       {:else}
         <p><em> All times in EST </em></p>
       {/if}
