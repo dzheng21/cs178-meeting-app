@@ -54,6 +54,7 @@
     }
   }
 
+  const data = get(groupStore);
   function colorIn() {
     if (input) {
       for (let id in availabilityStore) {
@@ -61,7 +62,6 @@
           LocationColorMap[availabilityStore[id]];
       }
     } else {
-      const data = get(groupStore);
 
       // iterate through data with indices
       for (let day = 0; day < data.length; day++) {
@@ -536,9 +536,46 @@
         "0 10px 10px -8px #1ed9b359";
       document.getElementById(hour).style.transform = "scale(1.05)";
     }
+
+    if(!input) {
+      let tipText = document.getElementById("tipText");
+      tipText.style.opacity = "1";
+      tipText.style.transform = "scale(1)";
+
+      let text = ""
+      let state = 0;
+      if (mode == "inPerson") {
+        state = 1;
+      }
+
+      const arr = Array.from(data[getWeekNumberFromID(id)][getTimeCodeFromID(id)][state]);
+      for (let i = 0; i < arr.length; i++) {
+        if(i == 0) {
+          text += arr[i];
+        } else {
+          text += ", " + arr[i];
+        }
+      }
+
+      if(arr.length == 1) {
+        text += " is available at this time"
+      } else if(arr.length != 0) {
+        text += " are available at this time"
+      }    
+
+      if(text == "") {
+        tipText.innerText = "No one is available at this time";
+      } else {
+        tipText.innerText = text;
+      }
+    }
   }
 
   function registerLeave(e, id) {
+    if(!input) {
+      document.getElementById("tipText").style.opacity = "0";
+    document.getElementById("tipText").style.transform = "scale(0)";
+    }
     document.getElementById(id).style.fontSize = "0px";
 
     let timeCode = getTimeCodeFromID(id);
