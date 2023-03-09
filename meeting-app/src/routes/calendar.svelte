@@ -748,7 +748,7 @@
     <div class="row" id="tipText">Nothing Selected</div>
     <div class="row">
       <div id="calendar" class="col">
-        <div class="cal week" style="height: 65vh;">
+        <div class="cal week" style="height: 70vh;">
           <div class="cal-header cal-with-scroll">
             <div class="cal-sidebar">
               <div class="cal-hidden-times">
@@ -1182,7 +1182,7 @@
     border-radius: 50px;
     margin: 0 auto;
     color: white;
-    max-width: 1000px;
+    max-width: 1100px;
     box-shadow: 0 0 16px #34495e80;
     border: 2px solid #2c3e50;
   }
